@@ -1,0 +1,8 @@
+* text=auto
+
+# Java faylları üçün LF line endings istifadə edin
+*.java text eol=lf
+*.gradle text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf
