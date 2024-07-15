@@ -40,7 +40,7 @@ Bu layihə, bank sistemləri üçün Java və Spring framework ilə yaradılmı�
 
 #### Hesab Yaratma (post)
 
-- Hesab yaradanda, `currency` və `userid`-dən istifadə edərək `account_id` yaradılır.
+- Hesab yaradanda, `currency` və `userid`-dən istifadə edərək `acc_number` yaradılır.
 - Bir müştərinin eyni valyutada birdən çox hesabı olmamalıdır.
 
 #### Ödəniş Et (post(payment))
