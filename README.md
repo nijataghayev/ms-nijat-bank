@@ -20,6 +20,12 @@ Bu layihə, bank sistemləri üçün Java və Spring framework ilə yaradılmı�
 - `currency`: Hesabın valyutası, varchar.
 - `amount`: Hesabın məbləği, double.
 
+### Payment Table
+
+- `id`: Ödəniş id-si, integer.
+- `total_amount`: Ödənilən məbləğ, double.
+- `account_id`: Hesab id-si, integer.
+
 ## İstifadəçi və Hesab Əlaqəsi
 
 - `User` və `Account` arasında One-to-Many əlaqəsi var. Bir istifadəçinin çoxlu hesabı ola bilər.
@@ -37,6 +43,12 @@ Bu layihə, bank sistemləri üçün Java və Spring framework ilə yaradılmı�
 - `post`: Yeni hesab əlavə etmək.
 - `get(optional)`: Hesab məlumatlarını oxumaq (optional).
 - `post(payment)`: Ödəniş etmək.
+
+### Payment Service
+
+- `processPayment`: Ödənişi yerinə yetirmək.
+- `getAllPayments`: Bütün ödənişlərin siyahısına baxmaq.
+- `getPayment`: İd-ə uyğun ödənişi oxumaq.
 
 #### Hesab Yaratma (post)
 
