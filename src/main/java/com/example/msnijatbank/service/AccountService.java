@@ -24,6 +24,24 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 
+    public void createAccount(AccountDto accountDto) {
+        log.debug("ActionLog.createAccount.start account {}", accountDto);
+
+        Long userId = accountDto.getUser().getId();
+        Currency currency = accountDto.getCurrency();
+
+        Optional<AccountEntity> existingAccount = accountRepository.findByUserIdAndCurrency(userId, currency);
+        if (existingAccount.isPresent()) {
+            throw new RuntimeException("User already has an account with this currency.");
+        }
+
+        AccountEntity accountEntity = accountMapper.mapToEntity(accountDto);
+        String accountNumber = currency.name() + userId;
+        accountEntity.setAccNumber(accountNumber);
+        accountRepository.save(accountEntity);
+        log.debug("ActionLog.createAccount.end account {}", accountDto);
+    }
+
     public List<AccountDto> getAllAccounts() {
         log.info("ActionLog.getAllAccounts.start");
         List<AccountEntity> accountEntities = accountRepository.findAll();
@@ -46,7 +64,7 @@ public class AccountService {
         return accountDto;
     }
 
-    public void payment(String fromCardNumber, String toCardNumber, Double amount) {
+    public void cardToCard(String fromCardNumber, String toCardNumber, Double amount) {
         AccountEntity fromCard = accountRepository.findByAccNumber(fromCardNumber);
         AccountEntity toCard = accountRepository.findByAccNumber(toCardNumber);
 
@@ -81,21 +99,16 @@ public class AccountService {
         }
     }
 
-    public void createAccount(AccountDto accountDto) {
-        log.debug("ActionLog.createAccount.start account {}", accountDto);
+    public void incomeToAccount(Long accountId, Double incomingAmount) {
+        log.info("ActionLog.incomeToAccount.start accountId {}", accountId);
+        var accountEntity = accountRepository
+                .findById(accountId)
+                .orElseThrow(() -> new NotFoundException(
+                        "ACCOUNT_NOT_FOUND",
+                        String.format("ActionLog.getAccount.id %d not found", accountId)));
 
-        Long userId = accountDto.getUser().getId();
-        Currency currency = accountDto.getCurrency();
-
-        Optional<AccountEntity> existingAccount = accountRepository.findByUserIdAndCurrency(userId, currency);
-        if (existingAccount.isPresent()) {
-            throw new RuntimeException("User already has an account with this currency.");
-        }
-
-        AccountEntity accountEntity = accountMapper.mapToEntity(accountDto);
-        String accountNumber = currency.name() + userId;
-        accountEntity.setAccNumber(accountNumber);
+        accountEntity.setAmount(accountEntity.getAmount() + incomingAmount);
         accountRepository.save(accountEntity);
-        log.debug("ActionLog.createAccount.end account {}", accountDto);
+        log.info("ActionLog.incomeToAccount.end accountId {}", accountId);
     }
 }

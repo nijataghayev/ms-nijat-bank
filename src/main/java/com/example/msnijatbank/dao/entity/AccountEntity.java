@@ -1,14 +1,17 @@
 package com.example.msnijatbank.dao.entity;
 
 import com.example.msnijatbank.enums.Currency;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +44,12 @@ public class AccountEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    @OneToMany(
+            mappedBy = "account",
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY
+    )
+    private List<PaymentEntity> payments;
 
     @Override
     public boolean equals(Object o) {

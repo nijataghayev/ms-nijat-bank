@@ -28,12 +28,12 @@ public class UserDto {
     private Integer age;
     @Schema(description = "This is FIN CODE of user", required = true, example = "1A111AA")
     private String finCode;
-    private List<Account> account;
+    private List<Account> accounts;
 
     @Data
     public static class Account {
         private Long id;
-        private String acc_number;
+        private String accNumber;
         private Currency currency;
         private Double amount;
     }
